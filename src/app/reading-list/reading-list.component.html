@@ -1,0 +1,17 @@
+<h2>Reading List</h2>
+<ul>
+  @for (post of readingList(); track post.id) {
+    <li>
+      <a [routerLink]="'/posts/' + post.id">{{ post.title }}</a>
+      <button
+        title="Remove post from reading list"
+        type="button"
+        (click)="removeFromReadingList(post.id)"
+      >
+        ❌
+      </button>
+    </li>
+  } @empty {
+    <li>There are no posts on your reading list.</li>
+  }
+</ul>

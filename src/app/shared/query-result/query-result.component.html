@@ -1,0 +1,14 @@
+@switch (result.status) {
+  @case ("loading") {
+    <p>loading</p>
+  }
+  @case ("success") {
+    <ng-container [ngTemplateOutlet]="child"></ng-container>
+  }
+  @case ("error") {
+    <p>error: {{ result.error }}</p>
+  }
+}
+<ng-template #child>
+  <ng-content />
+</ng-template>

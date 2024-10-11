@@ -1,0 +1,30 @@
+<div>
+  <small><a routerLink="/posts">&larr; all posts</a></small>
+</div>
+
+<app-query-result [result]="postResult">
+  @if (postResult.result) {
+    <h2>{{ postResult.result.title }}</h2>
+    <p>{{ postResult.result.body }}</p>
+    <button
+      [title]="isPostOnReadingList() ? 'Remove from list' : 'Add to list'"
+      type="button"
+      (click)="toggleReadingList(postResult.result)"
+    >
+      {{ isPostOnReadingList() ? "❌" : "➕" }}
+    </button>
+  }
+</app-query-result>
+
+<h3>Comments</h3>
+<app-query-result [result]="commentsResult">
+  <ul>
+    @for (comment of commentsResult.result; track comment.id) {
+      <li class="comment">
+        {{ comment.body }}
+        <br />
+        <small>{{ comment.email }}</small>
+      </li>
+    }
+  </ul>
+</app-query-result>
