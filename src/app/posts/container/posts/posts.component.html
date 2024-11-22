@@ -1,8 +1,12 @@
 <h1>Posts</h1>
 
+<div>
+    <input type="text" [(ngModel)]="filter" />
+</div>
+
 <app-query-result [result]="postsResult">
   <ul>
-    @for (post of postsResult.result; track post.id) {
+    @for (post of applyFilter(postsResult.result); track post.id) {
       <li>
         <a [routerLink]="'' + post.id">{{ post.title }}</a>
       </li>

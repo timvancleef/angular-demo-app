@@ -1,20 +1,29 @@
 import { Injectable } from '@angular/core';
-import { delay, firstValueFrom, of } from 'rxjs';
+import { firstValueFrom, tap } from 'rxjs';
 import { Post } from '../types';
-import posts from '../../fixtures/posts.fixture';
-import { randomNumber } from '../../core/math.utils';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostApi {
+  private posts: Post[] = [];
+  constructor(private httpClient: HttpClient) {}
+
   public fetchPosts(): Promise<Post[]> {
-    return firstValueFrom(of(posts).pipe(delay(randomNumber())));
+    if (this.posts.length > 1) {
+      return Promise.resolve(this.posts);
+    }
+
+    return firstValueFrom(
+      this.httpClient
+        .get<Post[]>('https://jsonplaceholder.typicode.com/posts')
+        .pipe(tap((posts) => (this.posts = posts))),
+    );
   }
 
-  public fetchPost(id: number): Promise<Post | undefined> {
-    return firstValueFrom(
-      of(posts.find((post) => post.id === id)).pipe(delay(randomNumber())),
-    );
+  public async fetchPost(id: number): Promise<Post | undefined> {
+    const posts = await this.fetchPosts();
+    return posts.find((p) => p.id === id);
   }
 }
